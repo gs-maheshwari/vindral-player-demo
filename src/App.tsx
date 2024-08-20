@@ -1,24 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useLayoutEffect, useRef } from 'react';
 import './App.css';
+import { Player } from '@vindral/web-sdk';
 
 function App() {
+  const playerRef = useRef<HTMLDivElement>(null);
+
+  const vindral = new Player(
+    {
+      url: "https://lb.dev.cdn.vindral.com",
+      channelId: "vindral_demo1_ci_a15cda72-ddb4-4882-85bf-5139f5eb86a3",
+      logLevel: "info",
+      iosMediaElementEnabled: true
+    },
+    { fullscreenButtonEnabled: true, controlsEnabled: false }
+  );
+
+  useLayoutEffect(() => {
+      if(playerRef.current){
+        vindral.attach(playerRef.current);
+        vindral.core.play();
+      }
+  });
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div ref={playerRef}></div>
     </div>
   );
 }
